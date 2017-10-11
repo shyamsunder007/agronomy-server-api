@@ -1,7 +1,13 @@
 from django.contrib.auth.models import User
 
-from rest_framework import serializers
+from rest_framework_gis import serializers
 from restapp.models import *
+
+class RadomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = random
+        fields = ('id','farm_id','point','poly')
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -19,7 +25,7 @@ class HouseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Households
         #print (str(model)+"hai")
-        fields = ('id', 'Household_lat','Household_lon','Households_vilid')
+        fields = ('id', 'Households_lat','Households_lon','Households_vilid')
 
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,3 +56,9 @@ class WateryieldSerializer(serializers.ModelSerializer):
         model = wateryield
         #print (str(model)+"hai")
         fields = ('id', 'well_id','yieldd','DateTimeField')
+
+class DumbSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = dumb
+        #print (str(model)+"hai")
+        fields = ('id', 'farmm_id','point')

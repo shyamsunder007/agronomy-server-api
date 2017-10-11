@@ -1,4 +1,4 @@
-from django.db import models
+from django.contrib.gis.db import models
 from datetime import datetime
 
 class village(models.Model):                       
@@ -42,12 +42,20 @@ class wateryield(models.Model):
 	yieldd=models.CharField(max_length=20)
 	DateTimeField=models.DateTimeField(default=datetime.now,blank=True)
 
+class welldumb(models.Model):
+	id=models.AutoField(primary_key=True)
+	farmm_id = models.CharField(max_length=20)
+	
+	point=models.PointField(srid=4326)
+	
+class random(models.Model):
+	id=models.AutoField(primary_key=True)
+	farm_id=models.CharField(max_length=20)
+	point=models.PointField(srid=4326)
+	poly=models.PolygonField(srid=4326,geography=True)
 
-
-
-
-
-
-
-
+class dumb(models.Model):
+        id=models.AutoField(primary_key=True)
+        farmm_id = models.CharField(max_length=20)
+        point=models.PointField(srid=4326)
 # Create your models here.

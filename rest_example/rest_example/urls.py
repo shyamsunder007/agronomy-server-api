@@ -1,13 +1,21 @@
-from django.conf.urls import patterns, include, url
-from django.contrib import admin
+from django.conf.urls import include, url
+from django.contrib.gis import admin
 
 from restapp import views
 
 admin.autodiscover()
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+url(r'^import/', views.importt,name='import'),
 
-       url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
+  url(r'^maps/(?P<pk>[0-9]+)/$', views.RandomDetail.as_view()),
+url(r'^maps/', views.RandomList.as_view()),
+
+
+ url(r'^wellslat/(?P<pk>[0-9]+)/$', views.DumbDetail.as_view()),
+    url(r'^wellslat/', views.DumbList.as_view()),
+
+      url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
     url(r'^users/', views.UserList.as_view()),
 
   url(r'^villages/(?P<pk>[0-9]+)/$', views.VillageDetail.as_view()),   

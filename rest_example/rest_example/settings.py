@@ -24,9 +24,20 @@ SECRET_KEY = '(9teub73-8t4g+-*uz-)05j%5h=ttl$d6@z32k3tokt)tt5-b!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
-
+GEOS_LIBRARY_PATH = "/usr/local/lib/libgeos_c.so"
+GDAL_LIBRARY_PATH = "/usr/local/lib/libgdal.so"
+PROJ4_LIBRARY_PATH = "/usr/local/lib/libproj.so"
+ALLOWED_HOSTS = ['*',]
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
 
 # Application definition
 
@@ -38,10 +49,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django.contrib.gis',
     'restapp',
+'rest_framework_gis',
+'corsheaders',
 ]
 
 MIDDLEWARE_CLASSES = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,8 +64,9 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'rest_example.urls'
 
@@ -77,13 +93,21 @@ WSGI_APPLICATION = 'rest_example.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+  #  'default': {
+   #     'ENGINE': 'django.db.backends.sqlite3',
+    #    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+   # }
+#'default': dj_database_url.config(default='postgres://localhost:5432/postgres_db_name'),
+'default': {
+       'ENGINE': 'django.contrib.gis.db.backends.postgis',
+      'NAME': 'group11',
+     'USER': 'group11',
+   'PASSWORD': '11',
+   'HOST': 'localhost',
+  'PORT': '',
+ }
+
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 

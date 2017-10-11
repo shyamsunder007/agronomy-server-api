@@ -1,11 +1,117 @@
 from django.contrib.auth.models import User
 from django.http import Http404
-
+from django.http import HttpResponse
 from restapp.serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from restapp.models import *
+
+from django.template import loader
+
+
+def importt(request):
+        l=random.objects.all()
+        context={'hai':l[0].farm_id+l[0].poly[0]}
+        for i in range(len(l)):
+        	x=l[i].farm_id
+        	for j in range(len(l[i].poly[0])):
+        		y=l[i].poly[0][j][0]
+        		z=l[i].poly[0][j][1]
+        		print(str(x)+str(y)+str(z))
+        		ac=points(farm_id=x,lat=y,lon=z)
+        		ac.save()
+        random.objects.all().delete()	
+        template = loader.get_template('restapp/import.html')
+        return HttpResponse(template.render(context, request))
+class RandomList(APIView):
+    def get(self, request, format=None):
+        users = random.objects.all()
+        serializer = RadomSerializer(users, many=True)
+        return Response(serializer.data)
+    def post(self, request, format=None):
+        serializer = RandomSerializer(data=request.DATA)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, pk, format=None):
+        user = self.get_object(pk)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+class RandomDetail(APIView):
+    def get_object(self, pk):
+        try:
+            print   (pk)
+            return random.objects.filter(pk=pk)
+        except random.DoesNotExist:
+            raise Http404
+    def get(self, request, pk, format=None):
+        print (pk)
+        user = self.get_object(pk)
+        user = RandomSerializer(user)
+        print (user.data)
+        return Response(user.data)
+    def put(self, request, pk, format=None):
+        print (pk)
+        user = self.get_object(pk)
+        serializer = RandomSerializer(user, data=request.DATA)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, pk, format=None):
+        print (pk)
+        user = self.get_object(pk)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class DumbList(APIView):
+    def get(self, request, format=None):
+        users = dumb.objects.all()
+        serializer = DumbSerializer(users, many=True)
+        return Response(serializer.data)
+    def post(self, request, format=None):
+        serializer = DumbSerializer(data=request.DATA)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, pk, format=None):
+        user = self.get_object(pk)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+class DumbDetail(APIView):
+    def get_object(self, pk):
+        try:
+            print   (pk)
+            return dumb.objects.filter(farmm_id=pk)
+        except dumb.DoesNotExist:
+            raise Http404
+    def get(self, request, pk, format=None):
+        print (pk)
+        user = self.get_object(pk)
+        user = DumbSerializer(user,many=True)
+        print (user.data)
+        return Response(user.data)
+    def put(self, request, pk, format=None):
+        print (pk)
+        user = self.get_object(pk)
+        serializer = DumbSerializer(user, data=request.DATA)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, pk, format=None):
+        print (pk)
+        user = self.get_object(pk)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 class UserList(APIView):
 
     def get(self, request, format=None):
@@ -287,7 +393,7 @@ class PointsList(APIView):
 class PointsDetail(APIView):
 
     def get_object(self, pk):
-        users = points.objects.get(farm_id=pk)
+        users = points.objects.filter(farm_id=pk)
         #print (users)
         serializer = PointsSerializer(users, many=True)
         #print ("ger")
@@ -309,7 +415,7 @@ class PointsDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
-        user = self.get_object(pk)
+        user = points.objects.filter(farm_id=pk)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
